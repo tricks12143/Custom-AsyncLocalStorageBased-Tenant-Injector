@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import {randomUUID} from 'crypto';
-import {alsMiddleWare} from "./middleware/alsMiddleware";
+import {alsMiddleWare} from "./middleware/ALSMiddleware";
 import {logger} from './utils/logger';
 import db from "./routes/dbSimulate";
 
