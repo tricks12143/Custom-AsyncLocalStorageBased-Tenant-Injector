@@ -72,7 +72,7 @@ const CommentsSection = ({ comments = [], onAddComment, onDeleteComment }) => {
         )}
       </div>
 
-      <form className="comment-form" onSubmit={handleSubmit}>
+      <div className="comment-form">
         <div className="comment-input-wrapper">
           <textarea
             className="comment-textarea"
@@ -83,15 +83,16 @@ const CommentsSection = ({ comments = [], onAddComment, onDeleteComment }) => {
             placeholder="Write a comment... (Ctrl+Enter to post)"
           />
           <button
-            type="submit"
+            type="button"
             className="comment-submit-btn"
             disabled={!commentText.trim()}
             title="Post Comment (Ctrl+Enter)"
+            onClick={handleSubmit}
           >
             <PaperAirplaneIcon width={18} height={18} />
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

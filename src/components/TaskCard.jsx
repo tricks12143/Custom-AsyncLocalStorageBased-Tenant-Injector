@@ -45,8 +45,10 @@ const TaskCard = ({
     e.dataTransfer.dropEffect = 'move';
 
     const rect = e.currentTarget.getBoundingClientRect();
-    const offsetY = e.clientY - rect.top;
-    const isTopHalf = offsetY < rect.height / 2;
+    const clientY = typeof e.clientY === 'number' ? e.clientY : 0;
+    const height = rect.height || 100;
+    const offsetY = clientY - rect.top;
+    const isTopHalf = offsetY < height / 2;
     const newPos = isTopHalf ? 'before' : 'after';
 
     if (dropPosition !== newPos) {
