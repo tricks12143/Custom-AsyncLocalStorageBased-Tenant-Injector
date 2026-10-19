@@ -55,6 +55,22 @@ describe('FileAttachmentZone Component', () => {
     expect(onChangeMock).toHaveBeenCalledWith([dummyAttachments[1]]);
   });
 
+  it('opens file preview modal when view button is clicked', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <FileAttachmentZone
+        attachments={dummyAttachments}
+        onChange={vi.fn()}
+      />
+    );
+
+    const viewButtons = screen.getAllByRole('button', { name: /view file/i });
+    await user.click(viewButtons[1]); // Click view on screenshot.png
+
+    expect(screen.getByRole('dialog', { name: /preview of screenshot\.png/i })).toBeInTheDocument();
+  });
+
   it('processes file selection from file input', async () => {
     const onChangeMock = vi.fn();
     const { container } = render(

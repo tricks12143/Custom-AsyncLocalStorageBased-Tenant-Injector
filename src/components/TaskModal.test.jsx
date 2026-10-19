@@ -174,4 +174,49 @@ describe('TaskModal Component', () => {
 
     expect(deadlineInput.value).toMatch(/T17:00/);
   });
+
+  it('preserves entered task title and description when a category is added', async () => {
+    const user = userEvent.setup();
+    let currentCategories = [...defaultCategories];
+    const onAddCategoryMock = vi.fn((newCat) => {
+      currentCategories = [...currentCategories, newCat];
+    });
+
+    const { rerender } = render(
+      <TaskModal
+        isOpen={true}
+        onClose={vi.fn()}
+        onSave={vi.fn()}
+        categories={currentCategories}
+        onAddCategory={onAddCategoryMock}
+      />
+    );
+
+    // Type task title
+    const titleInput = screen.getByLabelText(/task title/i);
+    await user.type(titleInput, 'Keep this important title');
+
+    // Add category
+    const select = screen.getByRole('combobox');
+    await user.selectOptions(select, '__NEW__');
+
+    const newCategoryInput = screen.getByPlaceholderText(/category name/i);
+    await user.type(newCategoryInput, 'Marketing{Enter}');
+
+    expect(onAddCategoryMock).toHaveBeenCalledWith('Marketing');
+
+    // Parent component updates categories prop
+    rerender(
+      <TaskModal
+        isOpen={true}
+        onClose={vi.fn()}
+        onSave={vi.fn()}
+        categories={currentCategories}
+        onAddCategory={onAddCategoryMock}
+      />
+    );
+
+    // Title should still be intact!
+    expect(titleInput).toHaveValue('Keep this important title');
+  });
 });

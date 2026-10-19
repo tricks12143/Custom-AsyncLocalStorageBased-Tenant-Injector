@@ -29,26 +29,28 @@ const TaskModal = ({
   const [isAddingCategory, setIsAddingCategory] = useState(false);
 
   useEffect(() => {
-    if (initialTask) {
-      setName(initialTask.name || '');
-      setDescription(initialTask.description || '');
-      setStatus(initialTask.status || 'pending');
-      setCategory(initialTask.category || 'General');
-      setDeadline(initialTask.deadline || '');
-      setAttachments(Array.isArray(initialTask.attachments) ? initialTask.attachments : []);
-      setComments(Array.isArray(initialTask.comments) ? initialTask.comments : []);
-    } else {
-      setName('');
-      setDescription('');
-      setStatus('pending');
-      setCategory(categories[0] || 'General');
-      setDeadline('');
-      setAttachments([]);
-      setComments([]);
+    if (isOpen) {
+      if (initialTask) {
+        setName(initialTask.name || '');
+        setDescription(initialTask.description || '');
+        setStatus(initialTask.status || 'pending');
+        setCategory(initialTask.category || 'General');
+        setDeadline(initialTask.deadline || '');
+        setAttachments(Array.isArray(initialTask.attachments) ? initialTask.attachments : []);
+        setComments(Array.isArray(initialTask.comments) ? initialTask.comments : []);
+      } else {
+        setName('');
+        setDescription('');
+        setStatus('pending');
+        setCategory(categories[0] || 'General');
+        setDeadline('');
+        setAttachments([]);
+        setComments([]);
+      }
+      setIsAddingCategory(false);
+      setNewCategoryInput('');
     }
-    setIsAddingCategory(false);
-    setNewCategoryInput('');
-  }, [initialTask, isOpen, categories]);
+  }, [initialTask, isOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -197,6 +199,17 @@ const TaskModal = ({
                       placeholder="Category name"
                       value={newCategoryInput}
                       onChange={(e) => setNewCategoryInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleCreateCategory(e);
+                        } else if (e.key === 'Escape') {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsAddingCategory(false);
+                        }
+                      }}
                       autoFocus
                     />
                     <button 
